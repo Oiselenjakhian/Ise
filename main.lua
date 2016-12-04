@@ -29,6 +29,7 @@ local image44 = { type="image", filename="44.png" }
 local image48 = { type="image", filename="48.png" }
 
 -- Assign image variables to a table
+-- image20 at index 18
 local potImages = {
 	image0,
 	image1,
@@ -72,14 +73,14 @@ local pot3
 local pot4
 local pot5
 local pot6
-local playerOneScore
+local potOneScore
 local pot7
 local pot8
 local pot9
 local pot10
 local pot11
 local pot12
-local playerTwoScore
+local potTwoScore
 
 -- Variables
 local _W = display.contentWidth / 2
@@ -89,6 +90,10 @@ local currentPot
 local nextPot
 local seedsHeldInPot
 local potSeeds
+local playerID = 1
+local distributionInProgress = false
+local playerOneScore
+local playerTwoScore
 
 -- Timer variables
 local timer1
@@ -183,9 +188,9 @@ function addGameScreen()
 	pot6.id = 6
 	pot6:addEventListener("tap", setPotID)
 	
-	playerOneScore = display.newRect(0, 0, 48, 48)
-	playerOneScore.fill = image0
-	playerOneScore.x = 888; playerOneScore.y = 384
+	potOneScore = display.newRect(0, 0, 48, 48)
+	potOneScore.fill = image0
+	potOneScore.x = 888; potOneScore.y = 384
 	
 	pot7 = display.newRect(0, 0, 48, 48)
 	pot7.x = 784; pot7.y = 280
@@ -223,9 +228,9 @@ function addGameScreen()
 	pot12.id = 12
 	pot12:addEventListener("tap", setPotID)
 	
-	playerTwoScore = display.newImage("0.png")
-	playerTwoScore.fill = image0
-	playerTwoScore.x = 140; playerTwoScore.y = 384
+	potTwoScore = display.newImage("0.png")
+	potTwoScore.fill = image0
+	potTwoScore.x = 140; potTwoScore.y = 384
 end
 
 function setPotID(event)
@@ -258,8 +263,29 @@ end
 
 --Change the image in a pot to match the number of seeds in the pot
 function changeImage(potID, imageValue)
-	-- Shift by 1 because image0 is at the first position
-	imageValue = imageValue + 1
+	-- Compensate for image0 being in first place and for image values above 16
+	-- Hard code the index values for image values above 16
+	if imageValue > 16 then
+		if imageValue == 20 then
+			imageValue = 18
+		elseif imageValue == 24 then
+			imageValue = 19
+		elseif imageValue == 28 then
+			imageValue = 20
+		elseif imageValue == 32 then
+			imageValue = 21
+		elseif imageValue == 36 then
+			imageValue = 22
+		elseif imageValue == 40 then
+			imageValue = 23
+		elseif imageValue == 44 then
+			imageValue = 24
+		elseif imageValue == 48 then
+			imageValue = 25
+		end
+	else
+		imageValue = imageValue + 1
+	end
 
 	if potID ==  1 then
 		pot1.fill = potImages[imageValue]
