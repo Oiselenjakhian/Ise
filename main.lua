@@ -19,9 +19,6 @@ local image13 = { type="image", filename="13.png" }
 local image14 = { type="image", filename="14.png" }
 local image15 = { type="image", filename="15.png" }
 local image16 = { type="image", filename="16.png" }
-local image17 = { type="image", filename="17.png" }
-local image18 = { type="image", filename="18.png" }
-local image19 = { type="image", filename="19.png" }
 local image20 = { type="image", filename="20.png" }
 local image24 = { type="image", filename="24.png" }
 local image28 = { type="image", filename="28.png" }
@@ -50,9 +47,6 @@ local potImages = {
 	image14,
 	image15,
 	image16,
-	image17,
-	image18,
-	image19,
 	image20,
 	image24,
 	image28,
