@@ -8,6 +8,28 @@ local image2 = { type="image", filename="2.png" }
 local image3 = { type="image", filename="3.png" }
 local image4 = { type="image", filename="4.png" }
 local image5 = { type="image", filename="5.png" }
+local image6 = { type="image", filename="6.png" }
+local image7 = { type="image", filename="7.png" }
+local image8 = { type="image", filename="8.png" }
+local image9 = { type="image", filename="9.png" }
+local image10 = { type="image", filename="10.png" }
+local image11 = { type="image", filename="11.png" }
+local image12 = { type="image", filename="12.png" }
+local image13 = { type="image", filename="13.png" }
+local image14 = { type="image", filename="14.png" }
+local image15 = { type="image", filename="15.png" }
+local image16 = { type="image", filename="16.png" }
+local image17 = { type="image", filename="17.png" }
+local image18 = { type="image", filename="18.png" }
+local image19 = { type="image", filename="19.png" }
+local image20 = { type="image", filename="20.png" }
+local image24 = { type="image", filename="24.png" }
+local image28 = { type="image", filename="28.png" }
+local image32 = { type="image", filename="32.png" }
+local image36 = { type="image", filename="36.png" }
+local image40 = { type="image", filename="40.png" }
+local image44 = { type="image", filename="44.png" }
+local image48 = { type="image", filename="48.png" }
 
 -- Assign image variables to a table
 local potImages = {
@@ -16,7 +38,29 @@ local potImages = {
 	image2,
 	image3,
 	image4,
-	image5
+	image5,
+	image6,
+	image7,
+	image8,
+	image9,
+	image10,
+	image11,
+	image12,
+	image13,
+	image14,
+	image15,
+	image16,
+	image17,
+	image18,
+	image19,
+	image20,
+	image24,
+	image28,
+	image32,
+	image36,
+	image40,
+	image44,
+	image48
 }
 
 -- Menu Screen
