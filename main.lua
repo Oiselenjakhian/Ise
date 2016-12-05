@@ -237,12 +237,10 @@ end
 
 function setPotID(event)
 	if distributionInProgress then
-		print("10 pages left.")
+		
 	else
 		currentPot = event.target.id
-		--print(currentPot)
 		seedsHeldInPot = seedsHeld(currentPot)
-		--print(seedsHeldInPot)
 		
 		if seedsHeldInPot == 0 then
 			--Don't pick from the empty pot
@@ -326,9 +324,9 @@ end
 
 -- Main engine of the entire application
 function Clock1()
-	function tick()
+	function tick1()
 		if seedsHeldInPot == 0 then
-			timer.cancel(timer1)
+			timer.pause(timer1)
 			distributionInProgress = false
 
 			if playerID == 1 then
@@ -359,33 +357,35 @@ function Clock1()
 			-- Test if we can do relay sowing
 			if seedsHeldInPot == 0 then
 				if potSeeds > 1 and potSeeds ~= 4 then
-					timer.cancel(timer1)
+					seedsHeldInPot = seedsHeld(currentPot)
+					timer.pause(timer1)
 					Clock2()
 				elseif potSeeds == 1 then
 					seedsHeldInPot = 0
 				elseif potSeeds == 4 then
 					seedsHeldInPot = 0
-					timer.cancel(timer1)
+					timer.pause(timer1)
 					Clock2()
 				end
 			else
 				if potSeeds == 4 then
-					timer.cancel(timer1)
+					timer.pause(timer1)
 					Clock2()
 				end
 			end
 		end
 	end
 	
-	timer1 = timer.performWithDelay(1000, tick, 0)
+	timer1 = timer.performWithDelay(1000, tick1, -1)
 end
 
 -- Clock 2 works with Clock 1 to show seed capture
 function Clock2()
-	function tick()
+	function tick2()
 		pickSeeds(currentPot)
 		Clock1()
-		timer.cancel(timer2)
+		timer.pause(timer2)
+		
 		if seedsHeldInPot == 0 then
 		
 		elseif potSeeds == 4 then
@@ -393,7 +393,7 @@ function Clock2()
 		end
 	end
 	
-	timer2 = timer.performWithDelay(1000, tick, 0)
+	timer2 = timer.performWithDelay(1000, tick2, -1)
 end
 
 function getNextPot(currentPot)
