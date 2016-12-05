@@ -97,10 +97,10 @@ local playerTwoScore
 
 -- Timer variables
 local timer1
+local timer2
 
 -- First function called by the program
 function main()
-	--printBoard()
 	mainMenu()
 end
 
@@ -109,7 +109,7 @@ function printBoard()
 	for i = 1, #board do
 		print("Pot Number:"..i.." Value: "..board[i])
 	end
-	print("")
+	print("-----------------------------------------")
 end
 
 -- Display the main menu
@@ -132,6 +132,7 @@ function mainMenu()
 	playBtn:addEventListener("tap", loadGame)
 end
 
+-- Move from the menu to the game screen
 function loadGame(event)
 	if event.target.name == "playbutton" then
 		transition.to(menuScreenGroup, {time = 0, alpha = 0, onComplete = addGameScreen})
@@ -139,6 +140,7 @@ function loadGame(event)
 	end
 end
 
+-- Game Screen
 function addGameScreen()
 	background = display.newImage("board.png", 0, 0, true )
 	background.x = _W 
@@ -234,16 +236,24 @@ function addGameScreen()
 end
 
 function setPotID(event)
-	currentPot = event.target.id
-	--print(currentPot)
-	seedsHeldInPot = seedsHeld(currentPot)
-	print(seedsHeldInPot)
-	
-	if seedsHeldInPot == 0 then
-		--Don't pick from the empty pot
+	if distributionInProgress then
+		print("10 pages left.")
 	else
-		pickSeeds(currentPot)
-		distributeSeeds()
+		currentPot = event.target.id
+		--print(currentPot)
+		seedsHeldInPot = seedsHeld(currentPot)
+		--print(seedsHeldInPot)
+		
+		if seedsHeldInPot == 0 then
+			--Don't pick from the empty pot
+		else
+			if playerID == getPlayerID(currentPot) then
+				pickSeeds(currentPot)
+				distributeSeeds()
+			else
+			
+			end
+		end
 	end
 end
 
@@ -259,6 +269,7 @@ end
 
 function distributeSeeds()
 	Clock1()
+	distributionInProgress = true
 end
 
 --Change the image in a pot to match the number of seeds in the pot
@@ -314,23 +325,79 @@ function changeImage(potID, imageValue)
 	end
 end
 
+-- Main engine of the entire application
 function Clock1()
 	function tick()
 		if seedsHeldInPot == 0 then
 			timer.cancel(timer1)
+			distributionInProgress = false
+
+			if playerID == 1 then
+				-- Check if the player 2 pots are empty
+				if sumPlayerTwoSeeds() == 0 then
+					-- Allow the first player to replay
+					playerID = 1
+				else
+					-- Switch to player 2
+					playerID = 2
+				end
+			else
+				-- Check if the player 1 pots are empty
+				if sumPlayerOneSeeds() == 0 then
+					-- Allow the second player to replay
+					playerID = 2
+				else
+					-- Switch to player 1
+					playerID = 1
+				end
+			end
 		else
 			nextPot = getNextPot(currentPot)
 			addSeeds(nextPot)
 			seedsHeldInPot = seedsHeldInPot - 1
 			currentPot = nextPot
+			
+			-- Test if we can do relay sowing
+			if seedsHeldInPot == 0 then
+				if potSeeds > 1 and potSeeds ~= 4 then
+					timer.cancel(timer1)
+					Clock2()
+				elseif potSeeds == 1 then
+					seedsHeldInPot = 0
+				elseif potSeeds == 4 then
+					seedsHeldInPot = 0
+					timer.cancel(timer1)
+					Clock2()
+				end
+			else
+				if potSeeds == 4 then
+					timer.cancel(timer1)
+					Clock2()
+				end
+			end
 		end
 	end
 	
 	timer1 = timer.performWithDelay(1000, tick, 0)
 end
 
+-- Clock 2 works with Clock 1 to show seed capture
+function Clock2()
+	function tick()
+		pickSeeds(currentPot)
+		Clock1()
+		timer.cancel(timer2)
+		if seedsHeldInPot == 0 then
+		
+		elseif potSeeds == 4 then
+		
+		end
+	end
+	
+	timer2 = timer.performWithDelay(1000, tick, 0)
+end
+
 function getNextPot(currentPot)
-	--print((currentPot % 12) + 1)
 	return (currentPot % 12) + 1
 end
 
@@ -341,8 +408,44 @@ function addSeeds(potID)
 	-- Change the value at the index position
 	board[potID] = potSeeds
 	
-	printBoard()
+	-- Change the image displayed for the pot
 	changeImage(potID, potSeeds)
+end
+
+-- Return the player ID. 1 for user, 2 for computer
+function getPlayerID(potID)
+	if potID < 7 then
+		return 1
+	else
+		return 2
+	end
+end
+
+-- Find the sum of seeds in pots 1 to 6
+function sumPlayerOneSeeds()
+	return board[1] + board[2] + board[3] + board[4] + board[5] + board[6]
+end
+
+-- Find the sum of seeds in pots 7 to 12
+function sumPlayerTwoSeeds()
+	return board[7] + board[8] + board[9] + board[10] + board[11] + board[12]
+end
+
+-- Find the total number of seeds in all the potSeeds
+function sumTotalSeeds()
+	return sumPlayerOneSeeds() + sumPlayerTwoSeeds()
+end
+
+function scorePlayer()
+
+end
+
+function scorePotOwner(currentPot)
+
+end
+
+function gameOver()
+
 end
 
 main()
