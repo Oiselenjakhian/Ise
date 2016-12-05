@@ -263,7 +263,6 @@ end
 
 function pickSeeds(potID)
 	board[potID] = 0
-	--printBoard()
 	changeImage(potID, 0)
 end
 
