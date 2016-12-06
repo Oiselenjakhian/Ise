@@ -92,8 +92,8 @@ local seedsHeldInPot
 local potSeeds
 local playerID = 1
 local distributionInProgress = false
-local playerOneScore
-local playerTwoScore
+local playerOneScore = 0
+local playerTwoScore = 0
 
 -- Timer variables
 local timer1
@@ -190,8 +190,10 @@ function addGameScreen()
 	pot6.id = 6
 	pot6:addEventListener("tap", setPotID)
 	
+	-- Gets a pot id of 13 because it is a store house
 	potOneScore = display.newRect(0, 0, 48, 48)
 	potOneScore.fill = image0
+	potOneScore.id = 13
 	potOneScore.x = 888; potOneScore.y = 384
 	
 	pot7 = display.newRect(0, 0, 48, 48)
@@ -230,8 +232,10 @@ function addGameScreen()
 	pot12.id = 12
 	pot12:addEventListener("tap", setPotID)
 	
+	-- Gets a pot id of 14 because it is a store house
 	potTwoScore = display.newImage("0.png")
 	potTwoScore.fill = image0
+	potTwoScore.id = 14
 	potTwoScore.x = 140; potTwoScore.y = 384
 end
 
@@ -319,6 +323,10 @@ function changeImage(potID, imageValue)
 		pot11.fill = potImages[imageValue]
 	elseif potID ==  12 then
 		pot12.fill = potImages[imageValue]
+	elseif potID ==  13 then
+		potOneScore.fill = potImages[imageValue]
+	elseif potID ==  14 then
+		potTwoScore.fill = potImages[imageValue]	
 	end
 end
 
@@ -387,9 +395,9 @@ function Clock2()
 		timer.pause(timer2)
 		
 		if seedsHeldInPot == 0 then
-		
+			scorePlayer()
 		elseif potSeeds == 4 then
-		
+			scorePotOwner(currentPot)
 		end
 	end
 	
@@ -435,8 +443,27 @@ function sumTotalSeeds()
 	return sumPlayerOneSeeds() + sumPlayerTwoSeeds()
 end
 
+-- Score the player who played a round
 function scorePlayer()
-
+	if playerID == 1 then
+		if sumTotalSeeds() == 4 then
+			playerOneScore = playerOneScore + 8
+			changeImage(13, playerOneScore)
+			gameOver()
+		else
+			playerOneScore = playerOneScore + 4
+			changeImage(13, playerOneScore)
+		end
+	else
+		if sumTotalSeeds() == 4 then
+			playerTwoScore = playerTwoScore + 8
+			changeImage(14, playerTwoScore)
+			gameOver()
+		else
+			playerTwoScore = playerTwoScore + 4
+			changeImage(14, playerTwoScore)
+		end
+	end
 end
 
 function scorePotOwner(currentPot)
