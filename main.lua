@@ -69,6 +69,12 @@ local menuScreenGroup
 local mmScreen
 local playBtn
 
+-- Alert Screen
+local alertDisplayGroup
+local conditionDisplay
+local alertBox
+local messageText
+
 -- Game Screen
 local background
 local hand1
@@ -157,7 +163,7 @@ function addGameScreen()
 	hand1.name = "hand1"
 	
 	hand2 = display.newImage("hand2.png")
-	hand2.x = 784; hand2.y = 176
+	hand2.x = 514; hand2.y = 176
 	hand2.name = "hand2"
 	
 	pot1 = display.newRect(0, 0, 48, 48)
@@ -245,6 +251,7 @@ function addGameScreen()
 	potTwoScore.x = 140; potTwoScore.y = 384
 end
 
+-- Get the pot ID of the pot selected by the user
 function setPotID(event)
 	if distributionInProgress then
 		
@@ -265,15 +272,18 @@ function setPotID(event)
 	end
 end
 
+-- Return the number of seeds held by a pot
 function seedsHeld(potID)
 	return board[potID]
 end
 
+-- Pick the seeds from a pot
 function pickSeeds(potID)
 	board[potID] = 0
 	changeImage(potID, 0)
 end
 
+-- Distribute seeds around the board.
 function distributeSeeds()
 	Clock1()
 	distributionInProgress = true
@@ -305,6 +315,7 @@ function changeImage(potID, imageValue)
 		imageValue = imageValue + 1
 	end
 
+	-- Fill a pot with the image from the images array
 	if potID ==  1 then
 		pot1.fill = potImages[imageValue]
 	elseif potID ==  2 then
@@ -390,7 +401,9 @@ function Clock1()
 		end
 	end
 	
-	timer1 = timer.performWithDelay(1000, tick1, -1)
+	timer1 = timer.performWithDelay(10, tick1, -1)
+	-- Replace 1000 with a variable
+	--timer1 = timer.performWithDelay(1000, tick1, -1)
 end
 
 -- Clock 2 works with Clock 1 to show seed capture
@@ -407,13 +420,17 @@ function Clock2()
 		end
 	end
 	
-	timer2 = timer.performWithDelay(1000, tick2, -1)
+	timer2 = timer.performWithDelay(10, tick2, -1)
+	-- Replace 1000 with a variable
+	--timer2 = timer.performWithDelay(1000, tick2, -1)
 end
 
+-- Wrap round the board to continue seed distribution
 function getNextPot(currentPot)
 	return (currentPot % 12) + 1
 end
 
+-- Increase the number of seeds in a pot by 1
 function addSeeds(potID)
 	-- Get the seeds in the pot at the selected pot id and increase it
 	potSeeds = board[potID] + 1
@@ -472,6 +489,7 @@ function scorePlayer()
 	end
 end
 
+-- Score the owner of a pot
 function scorePotOwner(currentPot)
 	if currentPot < 7 then
 		if sumTotalSeeds() == 4 then
@@ -494,24 +512,89 @@ function scorePotOwner(currentPot)
 	end
 end
 
+-- End the game
 function gameOver()
-
+	if playerOneScore > playerTwoScore then
+		alertScreen("Player 1 Wins", "Game Over. Click to play again.")
+	elseif playerOneScore < playerTwoScore then
+		alertScreen("Player 2 Wins", "Game Over. Click to play again.")
+	else
+		alertScreen("Its a Draw", "Game Over. Click to play again.")
+	end
 end
 
-function restartGame()
+function alertScreen(title, message)
+	alertBox = display.newImage("alertBox.png")
+	alertBox.x = _W; alertBox.y = _H
+	transition.from(alertBox, {time = 500, xScale = 0.5, yScale = 0.5, transition = easing.outExpo})
+	
+	conditionDisplay = display.newText(title, 0, 0, "Arial", 75)
+	conditionDisplay:setFillColor(1, 1, 1)
+	conditionDisplay.xScale = 0.5
+	conditionDisplay.yScale = 0.5
+	conditionDisplay.anchorX = 0.5
+	conditionDisplay.x = display.contentCenterX
+	conditionDisplay.y = display.contentCenterY - 30
+	
+	messageText = display.newText(message, 0, 0, "Arial", 50)
+	messageText:setFillColor(1, 1, 1)
+	messageText.xScale = 0.5
+	messageText.yScale = 0.5
+	messageText.anchorX = 0.5
+	messageText.x = display.contentCenterX
+	messageText.y = display.contentCenterY + 15
+	
+	alertDisplayGroup = display.newGroup()
+	alertDisplayGroup:insert(alertBox)
+	alertDisplayGroup:insert(conditionDisplay)
+	alertDisplayGroup:insert(messageText)
+	
+	alertBox:addEventListener("tap", restart)
+end
 
+function restart()
+	resetList()
+	resetVariables()
+	resetPotImages()
+	timer.pause(timer1)
+	timer.pause(timer2)
+	alertBox:removeEventListener("tap", restart)
+	alertDisplayGroup:removeSelf()
+	alertDisplayGroup = nil
 end
 
 function resetList()
-
+	for i = 1, #board do
+		board[i] = 4
+	end
 end
 
 function resetVariables()
-
+	currentPot = 0
+	nextPot = 0
+	seedsHeldInPot = 0
+	potSeeds = 0
+	playerID = 1
+	distributionInProgress = false
+	playerOneScore = 0
+	playerTwoScore = 0
 end
 
 function resetPotImages()
-
+	pot1.fill = image4
+	pot2.fill = image4
+	pot3.fill = image4
+	pot4.fill = image4
+	pot5.fill = image4
+	pot6.fill = image4
+	pot7.fill = image4
+	pot8.fill = image4
+	pot9.fill = image4
+	pot10.fill = image4
+	pot11.fill = image4
+	pot12.fill = image4
+	potOneScore.fill = image0
+	potTwoScore.fill = image0
 end
 
 main()
