@@ -19,6 +19,9 @@ local image13 = { type="image", filename="13.png" }
 local image14 = { type="image", filename="14.png" }
 local image15 = { type="image", filename="15.png" }
 local image16 = { type="image", filename="16.png" }
+local image17 = { type="image", filename="17.png" }
+local image18 = { type="image", filename="18.png" }
+local image19 = { type="image", filename="19.png" }
 local image20 = { type="image", filename="20.png" }
 local image24 = { type="image", filename="24.png" }
 local image28 = { type="image", filename="28.png" }
@@ -29,7 +32,7 @@ local image44 = { type="image", filename="44.png" }
 local image48 = { type="image", filename="48.png" }
 
 -- Assign image variables to a table
--- image20 at index 18
+-- image20 at index 21
 local potImages = {
 	image0,
 	image1,
@@ -48,6 +51,9 @@ local potImages = {
 	image14,
 	image15,
 	image16,
+	image17,
+	image18,
+	image19,
 	image20,
 	image24,
 	image28,
@@ -147,7 +153,7 @@ function addGameScreen()
 	background.y = _H
 	
 	hand1 = display.newImage("hand1.png")
-	hand1.x = 244; hand1.y = 592
+	hand1.x = 514; hand1.y = 592
 	hand1.name = "hand1"
 	
 	hand2 = display.newImage("hand2.png")
@@ -277,23 +283,23 @@ end
 function changeImage(potID, imageValue)
 	-- Compensate for image0 being in first place and for image values above 16
 	-- Hard code the index values for image values above 16
-	if imageValue > 16 then
+	if imageValue > 19 then
 		if imageValue == 20 then
-			imageValue = 18
-		elseif imageValue == 24 then
-			imageValue = 19
-		elseif imageValue == 28 then
-			imageValue = 20
-		elseif imageValue == 32 then
 			imageValue = 21
-		elseif imageValue == 36 then
+		elseif imageValue == 24 then
 			imageValue = 22
-		elseif imageValue == 40 then
+		elseif imageValue == 28 then
 			imageValue = 23
-		elseif imageValue == 44 then
+		elseif imageValue == 32 then
 			imageValue = 24
-		elseif imageValue == 48 then
+		elseif imageValue == 36 then
 			imageValue = 25
+		elseif imageValue == 40 then
+			imageValue = 26
+		elseif imageValue == 44 then
+			imageValue = 27
+		elseif imageValue == 48 then
+			imageValue = 28
 		end
 	else
 		imageValue = imageValue + 1
@@ -467,10 +473,44 @@ function scorePlayer()
 end
 
 function scorePotOwner(currentPot)
-
+	if currentPot < 7 then
+		if sumTotalSeeds() == 4 then
+			playerOneScore = playerOneScore + 8
+			changeImage(13, playerOneScore)
+			gameOver()
+		else
+			playerOneScore = playerOneScore + 4
+			changeImage(13, playerOneScore)
+		end
+	else
+		if sumTotalSeeds() == 4 then
+			playerTwoScore = playerTwoScore + 8
+			changeImage(14, playerTwoScore)
+			gameOver()
+		else
+			playerTwoScore = playerTwoScore + 4
+			changeImage(14, playerTwoScore)
+		end
+	end
 end
 
 function gameOver()
+
+end
+
+function restartGame()
+
+end
+
+function resetList()
+
+end
+
+function resetVariables()
+
+end
+
+function resetPotImages()
 
 end
 
