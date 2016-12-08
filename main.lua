@@ -401,9 +401,9 @@ function Clock1()
 		end
 	end
 	
-	timer1 = timer.performWithDelay(10, tick1, -1)
 	-- Replace 1000 with a variable
-	--timer1 = timer.performWithDelay(1000, tick1, -1)
+	--timer1 = timer.performWithDelay(10, tick1, -1)
+	timer1 = timer.performWithDelay(1000, tick1, -1)
 end
 
 -- Clock 2 works with Clock 1 to show seed capture
@@ -420,9 +420,9 @@ function Clock2()
 		end
 	end
 	
-	timer2 = timer.performWithDelay(10, tick2, -1)
 	-- Replace 1000 with a variable
-	--timer2 = timer.performWithDelay(1000, tick2, -1)
+	--timer2 = timer.performWithDelay(10, tick2, -1)
+	timer2 = timer.performWithDelay(1000, tick2, -1)
 end
 
 -- Wrap round the board to continue seed distribution
